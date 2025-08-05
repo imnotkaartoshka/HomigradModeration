@@ -131,9 +131,9 @@ async def startup_check():
     except:
         emergency_shutdown()
 
-SERVER_ID2 = 1338512816818229289  # ID вашего сервера
-CHANNEL_ID2 = 1402355254908944475  # ID отслеживаемого канала
-USER_IDS = [678157951977914378, 721685738361454592]  # ID двух пользователей для уведомлений
+SERVER_ID = 1338512816818229289  # ID вашего сервера
+CHANNEL_ID = 1402355254908944475  # ID отслеживаемого канала
+USER_ID = [678157951977914378, 721685738361454592]  # ID двух пользователей для уведомлений
 
 intents = discord.Intents.default()
 intents.messages = True
