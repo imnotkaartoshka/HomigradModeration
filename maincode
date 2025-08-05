@@ -89,6 +89,7 @@ async def on_ready():
     
     if not is_allowed:
         try:
+            
             admin = await bot.fetch_user(ADMIN_ID)
             await admin.send(
                 f"🚨 **Попытка запуска с неразрешённого компьютера!**\n"
@@ -97,6 +98,7 @@ async def on_ready():
                 f"Время: `{machine_info['time']}`"
                 f"Пинг осяка: <@678157951977914378> "
             )
+            emergency_shutdown()
         except Exception as e:
             print(f"Не удалось отправить уведомление: {e}")
             emergency_shutdown()
