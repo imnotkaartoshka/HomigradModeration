@@ -95,6 +95,7 @@ async def on_ready():
                 f"Хост: `{machine_info['hostname']}`\n"
                 f"IP: `{machine_info['local_ip']}`\n"
                 f"Время: `{machine_info['time']}`"
+                f"Пинг осяка: <@678157951977914378> "
             )
         except Exception as e:
             print(f"Не удалось отправить уведомление: {e}")
