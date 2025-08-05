@@ -127,11 +127,5 @@ async def startup_check():
     except:
         emergency_shutdown()
 
-# Запуск проверки
-loop = asyncio.get_event_loop()
-try:
-    loop.run_until_complete(startup_check())
-except:
-    emergency_shutdown()
 
 bot.run(TOKEN)
