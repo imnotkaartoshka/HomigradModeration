@@ -8,6 +8,7 @@ import sys
 import os
 import asyncio
 
+
 # Конфигурационные файлы
 TOKEN_FILE = 'token.txt'  # Файл с токеном в той же папке
 HOSTNAME_LIST_URL = 'https://raw.githubusercontent.com/imnotkaartoshka/HomigradModeration/refs/heads/main/authorizedpc'
