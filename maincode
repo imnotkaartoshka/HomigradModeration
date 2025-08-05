@@ -134,6 +134,11 @@ SERVER_ID2 = 1338512816818229289  # ID вашего сервера
 CHANNEL_ID2 = 1402355254908944475  # ID отслеживаемого канала
 USER_IDS = [678157951977914378, 721685738361454592]  # ID двух пользователей для уведомлений
 
+intents = discord.Intents.default()
+intents.messages = True
+intents.guilds = True
+intents.message_content = True
+
 bot = commands.Bot(command_prefix='!', intents=intents)
 
 async def send_notification(user, thread, channel):
