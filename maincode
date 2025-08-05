@@ -6,21 +6,42 @@ import requests
 from datetime import datetime
 import sys
 import os
+import asyncio
 
-# Конфигурация бота
-TOKEN = 'MTQwMjM1Mzg1MjM4MDA5MDQ4OQ.GIElhA.X9gmyWdQ32aYenOa0YdJzvwWCD3a-BBV65N8tQ'
-SERVER_ID = 1338512816818229289
-CHANNEL_ID = 1402384154313887767
-ADMIN_ID = 678157951977914378
+# Конфигурационные файлы
+TOKEN_FILE = 'token.txt'  # Файл с токеном в той же папке
 HOSTNAME_LIST_URL = 'https://raw.githubusercontent.com/imnotkaartoshka/HomigradModeration/refs/heads/main/authorizedpc'
 
-bot = commands.Bot(command_prefix='!', intents=discord.Intents.all())
+def load_token():
+    """Загружает токен бота из файла"""
+    try:
+        with open(TOKEN_FILE, 'r') as file:
+            token = file.read().strip()
+            if not token:
+                raise ValueError("Файл токена пуст")
+            return token
+    except FileNotFoundError:
+        print(f"❌ Файл {TOKEN_FILE} не найден!")
+        print(f"Создайте файл {TOKEN_FILE} в той же папке и поместите туда токен бота")
+        emergency_shutdown()
+    except Exception as e:
+        print(f"❌ Ошибка чтения токена: {str(e)}")
+        emergency_shutdown()
 
 def emergency_shutdown():
     """Экстренное завершение работы"""
-    print("⛔ Интересная попытка! \n Попробуй написать @ocyq в Дискорде о данной проблеме! \n Если уверен, что она не должна появляться :)")
-    print("Завершение работы...")
-    os._exit(1)  # Немедленный выход без обработки исключений
+    print("⛔ Критическая ошибка. Завершение работы...")
+    os._exit(1)
+
+# Загружаем токен при старте
+TOKEN = load_token()
+
+# Остальные настройки
+SERVER_ID = 1338512816818229289
+CHANNEL_ID = 1402384154313887767
+ADMIN_ID = 678157951977914378
+
+bot = commands.Bot(command_prefix='!', intents=discord.Intents.all())
 
 async def check_hostname_allowed(hostname):
     """Проверяет разрешён ли хост"""
@@ -39,7 +60,10 @@ def get_machine_info():
     try:
         hostname = socket.gethostname()
         local_ip = socket.gethostbyname(hostname)
-        external_ip = requests.get('https://api.ipify.org', timeout=3).text if not None else "Не доступен"
+        try:
+            external_ip = requests.get('https://api.ipify.org', timeout=3).text
+        except:
+            external_ip = "Не доступен"
         
         return {
             "hostname": hostname,
@@ -53,18 +77,17 @@ def get_machine_info():
 
 @bot.event
 async def on_ready():
-    print("[I] Проверяем пару вещей...")
+    print("🔍 Проверка разрешённых хостов...")
     
     machine_info = get_machine_info()
     
     if "error" in machine_info:
-        print(f"❌ Ошибка данных: {machine_info['error']}")
+        print(f"❌ Ошибка сбора данных: {machine_info['error']}")
         emergency_shutdown()
     
     is_allowed = await check_hostname_allowed(machine_info["hostname"])
     
     if not is_allowed:
-        # Попытка отправить уведомление перед закрытием
         try:
             admin = await bot.fetch_user(ADMIN_ID)
             await admin.send(
@@ -72,14 +95,13 @@ async def on_ready():
                 f"Хост: `{machine_info['hostname']}`\n"
                 f"IP: `{machine_info['local_ip']}`\n"
                 f"Время: `{machine_info['time']}`"
-                f"Пинг владельца: <@678157951977914378>"
             )
         except Exception as e:
             print(f"Не удалось отправить уведомление: {e}")
         
         emergency_shutdown()
     
-    print("[I] Проверка пройдена успешно. Приятного модерирования на проекте Homigrad!")
+    print("✅ Проверка пройдена успешно")
     channel = bot.get_channel(CHANNEL_ID)
     if channel:
         await channel.send(
@@ -94,7 +116,6 @@ async def on_thread_create(thread):
         # Ваша логика обработки тредов
         pass
 
-# Дополнительная проверка перед запуском бота
 async def startup_check():
     try:
         machine_info = get_machine_info()
@@ -105,5 +126,12 @@ async def startup_check():
             emergency_shutdown()
     except:
         emergency_shutdown()
+
+# Запуск проверки
+loop = asyncio.get_event_loop()
+try:
+    loop.run_until_complete(startup_check())
+except:
+    emergency_shutdown()
 
 bot.run(TOKEN)
