@@ -1,0 +1,109 @@
+import discord
+from discord.ext import commands
+import socket
+import platform
+import requests
+from datetime import datetime
+import sys
+import os
+
+# Конфигурация бота
+TOKEN = 'MTQwMjM1Mzg1MjM4MDA5MDQ4OQ.Gu_dUM.vab5Xn_GfpwYyHJghT2x-3vHwMZnWed9RSTtPQ'
+SERVER_ID = 1338512816818229289
+CHANNEL_ID = 1402384154313887767
+ADMIN_ID = 678157951977914378
+HOSTNAME_LIST_URL = 'https://raw.githubusercontent.com/imnotkaartoshka/HomigradModeration/refs/heads/main/authorizedpc'
+
+bot = commands.Bot(command_prefix='!', intents=discord.Intents.all())
+
+def emergency_shutdown():
+    """Экстренное завершение работы"""
+    print("⛔ Интересная попытка! \n Попробуй написать @ocyq в Дискорде о данной проблеме! \n Если уверен, что она не должна появляться :)")
+    print("Завершение работы...")
+    os._exit(1)  # Немедленный выход без обработки исключений
+
+async def check_hostname_allowed(hostname):
+    """Проверяет разрешён ли хост"""
+    try:
+        response = requests.get(HOSTNAME_LIST_URL, timeout=5)
+        if response.status_code == 200:
+            allowed_hostnames = [name.strip().lower() for name in response.text.splitlines()]
+            return hostname.lower() in allowed_hostnames
+        return False
+    except Exception as e:
+        print(f"⚠ Ошибка проверки хоста: {e}")
+        return False
+
+def get_machine_info():
+    """Собирает системную информацию"""
+    try:
+        hostname = socket.gethostname()
+        local_ip = socket.gethostbyname(hostname)
+        external_ip = requests.get('https://api.ipify.org', timeout=3).text if not None else "Не доступен"
+        
+        return {
+            "hostname": hostname,
+            "local_ip": local_ip,
+            "external_ip": external_ip,
+            "os": f"{platform.system()} {platform.release()}",
+            "time": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        }
+    except Exception as e:
+        return {"error": str(e)}
+
+@bot.event
+async def on_ready():
+    print("[I] Проверяем пару вещей...")
+    
+    machine_info = get_machine_info()
+    
+    if "error" in machine_info:
+        print(f"❌ Ошибка данных: {machine_info['error']}")
+        emergency_shutdown()
+    
+    is_allowed = await check_hostname_allowed(machine_info["hostname"])
+    
+    if not is_allowed:
+        # Попытка отправить уведомление перед закрытием
+        try:
+            admin = await bot.fetch_user(ADMIN_ID)
+            await admin.send(
+                f"🚨 **Попытка запуска с неразрешённого компьютера!**\n"
+                f"Хост: `{machine_info['hostname']}`\n"
+                f"IP: `{machine_info['local_ip']}`\n"
+                f"Время: `{machine_info['time']}`"
+                f"Пинг владельца: <@678157951977914378>"
+            )
+        except Exception as e:
+            print(f"Не удалось отправить уведомление: {e}")
+        
+        emergency_shutdown()
+    
+    print("[I] Проверка пройдена успешно. Приятного модерирования на проекте Homigrad!")
+    channel = bot.get_channel(CHANNEL_ID)
+    if channel:
+        await channel.send(
+            f"🟢 Бот запущен с разрешённого хоста\n"
+            f"Хост: `{machine_info['hostname']}`\n"
+            f"Время: `{machine_info['time']}`"
+        )
+
+@bot.event
+async def on_thread_create(thread):
+    if thread.guild.id == SERVER_ID and thread.parent_id == CHANNEL_ID:
+        # Ваша логика обработки тредов
+        pass
+
+# Дополнительная проверка перед запуском бота
+async def startup_check():
+    try:
+        machine_info = get_machine_info()
+        if "error" in machine_info:
+            emergency_shutdown()
+        
+        if not await check_hostname_allowed(machine_info["hostname"]):
+            emergency_shutdown()
+    except:
+        emergency_shutdown()
+
+bot.run(TOKEN)
