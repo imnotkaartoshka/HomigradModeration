@@ -98,8 +98,7 @@ async def on_ready():
             )
         except Exception as e:
             print(f"Не удалось отправить уведомление: {e}")
-        
-        emergency_shutdown()
+            emergency_shutdown()
     
     print("✅ Проверка пройдена успешно")
     channel = bot.get_channel(CHANNEL_ID)
