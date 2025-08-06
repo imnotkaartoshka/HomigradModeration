@@ -134,7 +134,7 @@ async def on_ready():
         await send_log_message(alert_msg)
         emergency_shutdown()
     
-    print("Fore.GREEN + [INFO] Проверка пройдена успешно" + Style.RESET_ALL)
+    print(Fore.GREEN + "[INFO] Проверка пройдена успешно" + Style.RESET_ALL)
     await send_log_message(
         f"🟢 Бот запущен с разрешённого хоста\n"
         f"Хост: `{machine_info['hostname']}`\n"
@@ -199,13 +199,13 @@ evening_start = datetime.strptime("18:00:00", "%H:%M:%S").time()
 night_start = datetime.strptime("00:00:00", "%H:%M:%S").time()
 
 if morning_start <= current_time < day_start:
-    greeting = "[Hello] Доброе утро! Утро стоит начинать с кофе, а не модерирования!"
+    greeting = "\n[Hello] Доброе утро! Утро стоит начинать с кофе, а не модерирования!\n"
 elif day_start <= current_time < evening_start:
-    greeting = "[Hello] Доброе день! Приятного модерирования!"
+    greeting = "\n[Hello] Доброе день! Приятного модерирования!\n"
 elif evening_start <= current_time or current_time < night_start:
-    greeting = "[Hello] Добрый вечер! Не забывайте пить воду!"
+    greeting = "\n[Hello] Добрый вечер! Не забывайте пить воду!\n"
 else:
-    greeting = "[Hello] Доброй ночи! Не сидите долго за сменой!"
+    greeting = "\n[Hello] Доброй ночи! Не сидите долго за сменой!\n"
 
 print(Fore.GREEN + greeting + Style.RESET_ALL)
 
