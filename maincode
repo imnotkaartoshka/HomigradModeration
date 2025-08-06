@@ -168,6 +168,22 @@ async def on_ready():
     print("\____/\___/\__, /\__,_/_/|_|  ")
     print("          /____/              ")
     print("                         ")
+    def on_exit(icon, item):
+        icon.stop()
+        sys.exit()
+
+    def create_icon():
+        image = Image.new('RGB', (16, 16), 'blue')
+        menu = pystray.Menu(pystray.MenuItem('Выход', on_exit))
+        icon = pystray.Icon("term_icon", image, "Терминал в трее", menu)
+    
+        # Скрываем консоль
+        ctypes.windll.user32.ShowWindow(ctypes.windll.kernel32.GetConsoleWindow(), 0)
+    
+        icon.run()
+
+    if __name__ == "__main__":
+        create_icon()
     print(f"")
     await send_log_message(
         f"🟢 Бот запущен с разрешённого хоста\n"
