@@ -8,6 +8,10 @@ import os
 import asyncio
 from colorama import Fore, Back, Style, init
 
+import tkinter as tk
+from tkinter import messagebox
+
+
 init()
 
 # Конфигурационные файлы
@@ -214,7 +218,13 @@ elif evening_start <= current_time or current_time < night_start:
 else:
     greeting = "\n[ Hello ] Доброй ночи! Не сидите долго за сменой!\n"
 
-print(Fore.GREEN + greeting + Style.RESET_ALL)
+root = tk.Tk()
+root.title("Приветствие")
+label = tk.Label(root, text=greeting, font=("Comic Sans", 14), padx=20, pady=20)
+label.pack()
+button = tk.Button(root, text="Спасибо!", command=root.destroy)
+button.pack()
+root.mainloop()
 
 
 bot.run(TOKEN)
