@@ -11,6 +11,9 @@ from colorama import Fore, Back, Style, init
 import tkinter as tk
 from tkinter import messagebox
 
+import pystray
+from PIL import Image
+import threading
 
 init()
 
@@ -240,12 +243,50 @@ elif evening_start <= current_time or current_time < night_start:
 else:
     greeting = "\nДоброй ночи!\nНе сидите долго за сменой!\n"
 
+def create_tray_icon():
+    # Создаем изображение для иконки (можно заменить на свое)
+    image = Image.new('RGB', (64, 64), color='white')
+
+    # Меню иконки в трее
+    menu = (
+        pystray.MenuItem("Показать", show_window),
+        pystray.MenuItem("Выход", exit_app)
+    )
+
+    # Создаем иконку
+    icon = pystray.Icon("greeting_app", image, "Приветствие", menu)
+    icon.run()
+
+# Функция для показа окна
+def show_window(icon, item):
+    icon.stop()  # Удаляем иконку из трея
+    root.deiconify()  # Восстанавливаем окно
+
+# Функция для выхода
+def exit_app(icon, item):
+    icon.stop()  # Удаляем иконку
+    os._exit(0)  # Полностью завершаем программу
+
+# Функция для сворачивания в трей
+def minimize_to_tray():
+    root.withdraw()  # Скрываем окно
+    threading.Thread(target=create_tray_icon, daemon=True).start()  # Запускаем иконку в трее
+
+# Создаем основное окно
 root = tk.Tk()
 root.title("Приветствие")
-label = tk.Label(root, text=greeting, font=("Comic Sans", 14), padx=20, pady=20)
+root.protocol('WM_DELETE_WINDOW', minimize_to_tray)  # При закрытии окна - сворачиваем в трей
+
+# Текст приветствия
+greeting = get_greeting()
+label = tk.Label(root, text=greeting, font=("Arial", 14), padx=20, pady=20)
 label.pack()
-button = tk.Button(root, text="Спасибо!", command=root.destroy)
+
+# Кнопка "Свернуть в трей"
+button = tk.Button(root, text="Свернуть в трей", command=minimize_to_tray)
 button.pack()
+
+# Запускаем главный цикл
 root.mainloop()
 
 bot.run(TOKEN)
