@@ -170,6 +170,7 @@ async def on_ready():
     print("\____/\___/\__, /\__,_/_/|_|  ")
     print("          /____/              ")
     print("                         ")
+    time.sleep(5)
     def on_exit(icon, item):
         icon.stop()
         sys.exit()
