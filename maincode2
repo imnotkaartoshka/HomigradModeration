@@ -1,0 +1,52 @@
+import discord
+from discord.ext import commands
+
+# Настройки бота
+TOKEN = 'token.txt'
+SERVER_ID = 1338512816818229289  # ID вашего сервера
+CHANNEL_ID = 1402355254908944475  # ID отслеживаемого канала
+USER_IDS = [721685738361454592, 678157951977914378]  # ID двух пользователей для уведомлений
+
+# Настройка прав бота
+intents = discord.Intents.default()
+intents.messages = True
+intents.guilds = True
+intents.message_content = True
+
+bot = commands.Bot(command_prefix='!', intents=intents)
+
+async def send_notification(user, thread, channel):
+    try:
+        await user.send(
+            f"'''🚨 **Новый тред создан!**\n"
+            f"**Сервер:** {thread.guild.name}\n"
+            f"**Канал:** {channel.name}\n"
+            f"**Тред:** {thread.name}'''\n"
+            f"**Ссылка:** {thread.jump_url}"
+        )
+        print(f"[DONE]: Уведомление отправлено пользователю {user.name}")
+    except discord.Forbidden:
+        print(f"[ERR]: Не удалось отправить сообщение пользователю {user.name} \n(ocyq p.s. Откройте личку)")
+    except Exception as e:
+        print(f"[ERR]: Ошибка при отправке пользователю {user.name}: {e}")
+
+@bot.event
+async def on_ready():
+    print(f'[LaunchService]: Бот {bot.user} готов к работе!')
+    print(f'[LaunchService]: Отслеживаю треды в канале {CHANNEL_ID} на сервере {SERVER_ID}')
+    print(f'[LaunchService]: Уведомления будут отправляться авторизованным пользователям!')
+
+@bot.event
+async def on_thread_create(thread):
+    if thread.guild.id == SERVER_ID and thread.parent_id == CHANNEL_ID:
+        channel = bot.get_channel(CHANNEL_ID)
+        for user_id in USER_IDS:
+            try:
+                user = await bot.fetch_user(user_id)
+                await send_notification(user, thread, channel)
+            except discord.NotFound:
+                print(f"Пользователь с ID {user_id} не найден")
+            except Exception as e:
+                print(f"Ошибка при обработке пользователя {user_id}: {e}")
+
+bot.run(TOKEN)
