@@ -7,6 +7,7 @@ from datetime import datetime
 import sys
 import os
 import asyncio
+import io
 
 
 # Конфигурационные файлы
@@ -114,12 +115,6 @@ async def on_ready():
             f"Время: `{machine_info['time']}`"
         )
 
-@bot.event
-async def on_thread_create(thread):
-    if thread.guild.id == SERVER_ID and thread.parent_id == CHANNEL_ID:
-        # Ваша логика обработки тредов
-        pass
-
 async def startup_check():
     try:
         machine_info = get_machine_info()
@@ -132,3 +127,60 @@ async def startup_check():
         emergency_shutdown()
 
 bot.run(TOKEN)
+
+# Получаем текущее время
+current_time = datetime.datetime.now().time()
+
+# Определяем время для разных периодов дня
+morning_start = datetime.time(6, 0, 0)      # 6:00
+day_start = datetime.time(12, 0, 0)         # 12:00
+evening_start = datetime.time(18, 0, 0)     # 18:00
+night_start = datetime.time(0, 0, 0)        # 00:00 (полночь)
+
+if morning_start <= current_time < day_start:
+    greeting = "[HELLO!] Доброе утро! Приятного администрирования на проекте Homigrad!"
+elif day_start <= current_time < evening_start:
+    greeting = "[HELLO!] Добрый день! Приятного администрирования на проекте Homigrad!"
+elif evening_start <= current_time or current_time < night_start:
+    greeting = "[HELLO!] Добрый вечер! Приятного администрирования на проекте Homigrad!"
+else:
+    greeting = "[HELLO!] Ночь - не лучшее время для модерации.. Приятного администрирования на проекте Homigrad!"
+
+print(greeting)
+
+def run_code_from_github(raw_url):
+    try:
+        # Загружаем код
+        response = requests.get(raw_url)
+        response.raise_for_status()  # Проверяем на ошибки
+        
+        # Получаем код
+        code = response.text
+        
+        # Перенаправляем stdout, чтобы перехватить вывод
+        old_stdout = sys.stdout
+        sys.stdout = buffer = io.StringIO()
+        
+        # Выполняем код
+        try:
+            exec(code, {'__name__': '__main__'})
+        except Exception as e:
+            print(f"Ошибка при выполнении кода: {e}")
+        finally:
+            # Восстанавливаем stdout
+            sys.stdout = old_stdout
+        
+        # Получаем вывод
+        output = buffer.getvalue()
+        return output
+    
+    except requests.exceptions.RequestException as e:
+        return f"Ошибка при загрузке кода: {e}"
+
+if __name__ == "__main__":
+    # Готовая ссылка на код (замените на свою)
+    github_raw_url = "https://raw.githubusercontent.com/imnotkaartoshka/HomigradModeration/refs/heads/main/maincode"
+
+
+    result = run_code_from_github(github_raw_url)
+    print(result)
