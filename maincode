@@ -185,16 +185,15 @@ async def startup_check():
     except:
         emergency_shutdown()
 
-import datetime
 
 # Получаем текущее время
-current_time = datetime.datetime.now().time()
+current_time = datetime.now().time()
 
-# Определяем время для разных периодов дня
-morning_start = datetime.time(6, 0, 0)      # 6:00
-day_start = datetime.time(12, 0, 0)         # 12:00
-evening_start = datetime.time(18, 0, 0)     # 18:00
-night_start = datetime.time(0, 0, 0)        # 00:00 (полночь)
+# Определяем временные интервалы
+morning_start = datetime.strptime("06:00:00", "%H:%M:%S").time()
+day_start = datetime.strptime("12:00:00", "%H:%M:%S").time()
+evening_start = datetime.strptime("18:00:00", "%H:%M:%S").time()
+night_start = datetime.strptime("00:00:00", "%H:%M:%S").time()
 
 if morning_start <= current_time < day_start:
     greeting = "[Hello] Доброе утро! Утро стоит начинать с кофе, а не модерирования!"
