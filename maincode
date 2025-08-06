@@ -51,7 +51,6 @@ def emergency_shutdown():
 
 TOKEN = load_token()
 print(Fore.GREEN + "[ Launcher ] Токен загружен.. Переходим к следующему этапу запуска." + Style.RESET_ALL)
-print(f"")
 
 intents = discord.Intents.default()
 intents.messages = True
@@ -105,9 +104,11 @@ async def send_log_message(message):
 
 @bot.event
 async def on_ready():
+    print(Fore.GREEN + "[ INFO ] Игнорируйте слова бота выше, мне лень их убирать.." + Style.RESET_ALL)
+    print(f"")
     print(Fore.GREEN + "[ INFO ] Проверка разрешённых хостеров..." + Style.RESET_ALL)
     print(f"")
-    
+
     machine_info = get_machine_info()
     
     if "error" in machine_info:
@@ -149,7 +150,7 @@ async def on_ready():
 @bot.event
 async def on_thread_create(thread):
     """Обработка создания новых тредов"""
-    print("Создан новый тред, отправляю сообщение в Discord - {thread.name}")
+    print("[ NOTIFICATION ]Создан новый тред, отправляю сообщение в Discord")
     print(" ")
     if thread.guild.id == TRACK_SERVER_ID and thread.parent_id == TRACK_CHANNEL_ID:
         try:
@@ -205,13 +206,13 @@ evening_start = datetime.strptime("18:00:00", "%H:%M:%S").time()
 night_start = datetime.strptime("00:00:00", "%H:%M:%S").time()
 
 if morning_start <= current_time < day_start:
-    greeting = "\n[Hello] Доброе утро! Утро стоит начинать с кофе, а не модерирования!\n"
+    greeting = "\n[ Hello ] Доброе утро! Утро стоит начинать с кофе, а не модерирования!\n"
 elif day_start <= current_time < evening_start:
-    greeting = "\n[Hello] Доброе день! Приятного модерирования!\n"
+    greeting = "\n[ Hello ] Доброе день! Приятного модерирования!\n"
 elif evening_start <= current_time or current_time < night_start:
-    greeting = "\n[Hello] Добрый вечер! Не забывайте пить воду!\n"
+    greeting = "\n[ Hello ] Добрый вечер! Не забывайте пить воду!\n"
 else:
-    greeting = "\n[Hello] Доброй ночи! Не сидите долго за сменой!\n"
+    greeting = "\n[ Hello ] Доброй ночи! Не сидите долго за сменой!\n"
 
 print(Fore.GREEN + greeting + Style.RESET_ALL)
 
