@@ -176,7 +176,7 @@ async def on_ready():
 
     def create_icon():
         image = Image.new('RGB', (16, 16), 'blue')
-        menu = pystray.Menu(pystray.MenuItem('Выход', on_exit))
+        menu = pystray.Menu(pystray.MenuItem('Запуск', on_exit))
         icon = pystray.Icon("term_icon", image, "Терминал в трее", menu)
     
         # Скрываем консоль
