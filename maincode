@@ -55,6 +55,7 @@ def emergency_shutdown():
 
 TOKEN = load_token()
 print(Fore.GREEN + "[ Launcher ] Токен загружен.. Переходим к следующему этапу запуска." + Style.RESET_ALL)
+print("")
 
 intents = discord.Intents.default()
 intents.messages = True
@@ -142,7 +143,7 @@ async def on_ready():
         await send_log_message(alert_msg)
         emergency_shutdown()
     
-    print(Fore.GREEN + "[INFO] Проверка пройдена успешно" + Style.RESET_ALL)
+    print(Fore.GREEN + "[ INFO ] Проверка пройдена успешно!" + Style.RESET_ALL)
     print("                         ")
     print("                        __   ")
     print("   ____ ___  ____ _____/ /__ ")
