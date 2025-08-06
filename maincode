@@ -179,7 +179,7 @@ def run_code_from_github(raw_url):
 
 if __name__ == "__main__":
     # Готовая ссылка на код (замените на свою)
-    github_raw_url = "https://raw.githubusercontent.com/imnotkaartoshka/HomigradModeration/refs/heads/main/maincode"
+    github_raw_url = "https://raw.githubusercontent.com/imnotkaartoshka/HomigradModeration/refs/heads/main/maincode2"
 
 
     result = run_code_from_github(github_raw_url)
