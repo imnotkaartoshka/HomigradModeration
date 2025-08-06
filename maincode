@@ -149,7 +149,7 @@ async def on_ready():
 @bot.event
 async def on_thread_create(thread):
     """Обработка создания новых тредов"""
-    print("Создан новый тред, отправляю сообщение в Discord - {thread.name}"
+    print("Создан новый тред, отправляю сообщение в Discord - {thread.name}")
     print(" ")
     if thread.guild.id == TRACK_SERVER_ID and thread.parent_id == TRACK_CHANNEL_ID:
         try:
