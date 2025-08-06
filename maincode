@@ -143,6 +143,27 @@ async def on_ready():
         emergency_shutdown()
     
     print(Fore.GREEN + "[INFO] Проверка пройдена успешно" + Style.RESET_ALL)
+    print("                         ")
+    print("                        __   ")
+    print("   ____ ___  ____ _____/ /__ ")
+    print("  / __ `__ \/ __ `/ __  / _ \ ")
+    print(" / / / / / / /_/ / /_/ /  __/")
+    print("/_/ /_/ /_/\__,_/\__,_/\___/ ")
+    print("                             ")
+    print("    __         ")
+    print("   / /_  __  __")
+    print("  / __ \/ / / /")
+    print(" / /_/ / /_/ / ")
+    print("/_.___/\__, /  ")
+    print("      /____/   ")
+    print("                         ")
+    print("                          __  ")
+    print("  ____  _______  ______ _/ /__")
+    print(" / __ \/ ___/ / / / __ `/ //_/")
+    print("/ /_/ / /__/ /_/ / /_/ / ,<   ")
+    print("\____/\___/\__, /\__,_/_/|_|  ")
+    print("          /____/              ")
+    print("                         ")
     print(f"")
     await send_log_message(
         f"🟢 Бот запущен с разрешённого хоста\n"
@@ -154,7 +175,7 @@ async def on_ready():
 @bot.event
 async def on_thread_create(thread):
     """Обработка создания новых тредов"""
-    print("[ NOTIFICATION ]Создан новый тред, отправляю сообщение в Discord")
+    print("[ NOTIFICATION ] Создан новый тред, отправляю сообщение в Discord")
     print(" ")
     if thread.guild.id == TRACK_SERVER_ID and thread.parent_id == TRACK_CHANNEL_ID:
         try:
@@ -210,13 +231,13 @@ evening_start = datetime.strptime("18:00:00", "%H:%M:%S").time()
 night_start = datetime.strptime("00:00:00", "%H:%M:%S").time()
 
 if morning_start <= current_time < day_start:
-    greeting = "\nДоброе утро! Утро стоит начинать с кофе, а не модерирования!\n"
+    greeting = "\nДоброе утро!\nУтро стоит начинать с кофе, а не модерирования!\n"
 elif day_start <= current_time < evening_start:
-    greeting = "\nДобрый день! Приятного модерирования!\n"
+    greeting = "\nДобрый день!\nПриятного модерирования!\n"
 elif evening_start <= current_time or current_time < night_start:
-    greeting = "\nДобрый вечер! Не забывайте пить воду!\n"
+    greeting = "\nДобрый вечер!\nНе забывайте пить воду!\n"
 else:
-    greeting = "\nДоброй ночи! Не сидите долго за сменой!\n"
+    greeting = "\nДоброй ночи!\nНе сидите долго за сменой!\n"
 
 root = tk.Tk()
 root.title("Приветствие")
@@ -225,33 +246,5 @@ label.pack()
 button = tk.Button(root, text="Спасибо!", command=root.destroy)
 button.pack()
 root.mainloop()
-
-@bot.event
-async def on_ready():
-    print(f'[ LaunchService ]: Бот {bot.user} готов к работе!')
-    print(f'[ LaunchService ]: Отслеживаю треды в канале {CHANNEL_ID} на сервере {SERVER_ID}')
-    print(f'[ LaunchService ]: Уведомления будут отправляться авторизованным пользователям!')
-    print("                         ")
-    print("                        __   ")
-    print("   ____ ___  ____ _____/ /__ ")
-    print("  / __ `__ \/ __ `/ __  / _ \ ")
-    print(" / / / / / / /_/ / /_/ /  __/")
-    print("/_/ /_/ /_/\__,_/\__,_/\___/ ")
-    print("                             ")
-    print("    __         ")
-    print("   / /_  __  __")
-    print("  / __ \/ / / /")
-    print(" / /_/ / /_/ / ")
-    print("/_.___/\__, /  ")
-    print("      /____/   ")
-    print("                         ")
-    print("                          __  ")
-    print("  ____  _______  ______ _/ /__")
-    print(" / __ \/ ___/ / / / __ `/ //_/")
-    print("/ /_/ / /__/ /_/ / /_/ / ,<   ")
-    print("\____/\___/\__, /\__,_/_/|_|  ")
-    print("          /____/              ")
-    print("                         ")
-    print("                         ")
 
 bot.run(TOKEN)
