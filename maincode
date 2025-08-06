@@ -210,13 +210,13 @@ evening_start = datetime.strptime("18:00:00", "%H:%M:%S").time()
 night_start = datetime.strptime("00:00:00", "%H:%M:%S").time()
 
 if morning_start <= current_time < day_start:
-    greeting = "\n[ Hello ] Доброе утро! Утро стоит начинать с кофе, а не модерирования!\n"
+    greeting = "\nДоброе утро! Утро стоит начинать с кофе, а не модерирования!\n"
 elif day_start <= current_time < evening_start:
-    greeting = "\n[ Hello ] Доброе день! Приятного модерирования!\n"
+    greeting = "\nДобрый день! Приятного модерирования!\n"
 elif evening_start <= current_time or current_time < night_start:
-    greeting = "\n[ Hello ] Добрый вечер! Не забывайте пить воду!\n"
+    greeting = "\nДобрый вечер! Не забывайте пить воду!\n"
 else:
-    greeting = "\n[ Hello ] Доброй ночи! Не сидите долго за сменой!\n"
+    greeting = "\nДоброй ночи! Не сидите долго за сменой!\n"
 
 root = tk.Tk()
 root.title("Приветствие")
@@ -226,5 +226,32 @@ button = tk.Button(root, text="Спасибо!", command=root.destroy)
 button.pack()
 root.mainloop()
 
+@bot.event
+async def on_ready():
+    print(f'[ LaunchService ]: Бот {bot.user} готов к работе!')
+    print(f'[ LaunchService ]: Отслеживаю треды в канале {CHANNEL_ID} на сервере {SERVER_ID}')
+    print(f'[ LaunchService ]: Уведомления будут отправляться авторизованным пользователям!')
+    print("                         ")
+    print("                        __   ")
+    print("   ____ ___  ____ _____/ /__ ")
+    print("  / __ `__ \/ __ `/ __  / _ \ ")
+    print(" / / / / / / /_/ / /_/ /  __/")
+    print("/_/ /_/ /_/\__,_/\__,_/\___/ ")
+    print("                             ")
+    print("    __         ")
+    print("   / /_  __  __")
+    print("  / __ \/ / / /")
+    print(" / /_/ / /_/ / ")
+    print("/_.___/\__, /  ")
+    print("      /____/   ")
+    print("                         ")
+    print("                          __  ")
+    print("  ____  _______  ______ _/ /__")
+    print(" / __ \/ ___/ / / / __ `/ //_/")
+    print("/ /_/ / /__/ /_/ / /_/ / ,<   ")
+    print("\____/\___/\__, /\__,_/_/|_|  ")
+    print("          /____/              ")
+    print("                         ")
+    print("                         ")
 
 bot.run(TOKEN)
