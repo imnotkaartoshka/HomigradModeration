@@ -278,8 +278,7 @@ root.title("Приветствие")
 root.protocol('WM_DELETE_WINDOW', minimize_to_tray)  # При закрытии окна - сворачиваем в трей
 
 # Текст приветствия
-greeting = get_greeting()
-label = tk.Label(root, text=greeting, font=("Arial", 14), padx=20, pady=20)
+label = tk.Label(root, text=greeting, font=("Comic sans", 14), padx=20, pady=20)
 label.pack()
 
 # Кнопка "Свернуть в трей"
