@@ -10,17 +10,6 @@ from colorama import Fore, Back, Style, init
 
 init()
 
-
-
-
-print("Обычный текст")
-print(Fore.RED + "Этот текст красный" + Style.RESET_ALL)
-print(Fore.GREEN + "Этот текст зелёный" + Style.RESET_ALL)
-print("Снова обычный текст")
-
-
-
-
 # Конфигурационные файлы
 TOKEN_FILE = 'token.txt'
 HOSTNAME_LIST_URL = 'https://raw.githubusercontent.com/imnotkaartoshka/HomigradModeration/refs/heads/main/authorizedpc'
