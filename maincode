@@ -51,6 +51,7 @@ def emergency_shutdown():
 
 TOKEN = load_token()
 print(Fore.GREEN + "[ Launcher ] Токен загружен.. Переходим к следующему этапу запуска." + Style.RESET_ALL)
+print(f"")
 
 intents = discord.Intents.default()
 intents.messages = True
@@ -70,6 +71,7 @@ async def check_hostname_allowed(hostname):
     except Exception as e:
         print(f"[!] Ошибка проверки: {e}")
         return False
+
 
 def get_machine_info():
     """Собирает системную информацию"""
@@ -104,6 +106,7 @@ async def send_log_message(message):
 @bot.event
 async def on_ready():
     print(Fore.GREEN + "[ INFO ] Проверка разрешённых хостеров..." + Style.RESET_ALL)
+    print(f"")
     
     machine_info = get_machine_info()
     
@@ -135,6 +138,7 @@ async def on_ready():
         emergency_shutdown()
     
     print(Fore.GREEN + "[INFO] Проверка пройдена успешно" + Style.RESET_ALL)
+    print(f"")
     await send_log_message(
         f"🟢 Бот запущен с разрешённого хоста\n"
         f"Хост: `{machine_info['hostname']}`\n"
@@ -145,6 +149,8 @@ async def on_ready():
 @bot.event
 async def on_thread_create(thread):
     """Обработка создания новых тредов"""
+    print("Создан новый тред, отправляю сообщение в Discord - {thread.name}"
+    print(" ")
     if thread.guild.id == TRACK_SERVER_ID and thread.parent_id == TRACK_CHANNEL_ID:
         try:
             message = (
