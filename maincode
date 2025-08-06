@@ -6,6 +6,20 @@ import requests
 from datetime import datetime
 import os
 import asyncio
+from colorama import Fore, Back, Style, init
+
+init()
+
+
+
+
+print("Обычный текст")
+print(Fore.RED + "Этот текст красный" + Style.RESET_ALL)
+print(Fore.GREEN + "Этот текст зелёный" + Style.RESET_ALL)
+print("Снова обычный текст")
+
+
+
 
 # Конфигурационные файлы
 TOKEN_FILE = 'token.txt'
@@ -47,7 +61,7 @@ def emergency_shutdown():
 
 
 TOKEN = load_token()
-print("[ Launcher ] Токен загружен.. Переходим к следующему этапу запуска.")
+print(Fore.GREEN + "[ Launcher ] Токен загружен.. Переходим к следующему этапу запуска." + Style.RESET_ALL)
 
 intents = discord.Intents.default()
 intents.messages = True
@@ -100,7 +114,7 @@ async def send_log_message(message):
 
 @bot.event
 async def on_ready():
-    print("[ INFO ] Проверка разрешённых хостеров...")
+    print(Fore.GREEN + "[ INFO ] Проверка разрешённых хостеров..." + Style.RESET_ALL)
     
     machine_info = get_machine_info()
     
@@ -126,12 +140,12 @@ async def on_ready():
             admin = await bot.fetch_user(ADMIN_ID)
             await admin.send(alert_msg)
         except Exception as e:
-            print(f"Не удалось отправить уведомление админу: {e}")
+            print(f"Не удалось отправить уведомление админу: {e}" + Style.RESET_ALL)
         
         await send_log_message(alert_msg)
         emergency_shutdown()
     
-    print("✅ Проверка пройдена успешно")
+    print("Fore.GREEN + [INFO] Проверка пройдена успешно" + Style.RESET_ALL)
     await send_log_message(
         f"🟢 Бот запущен с разрешённого хоста\n"
         f"Хост: `{machine_info['hostname']}`\n"
@@ -204,7 +218,7 @@ elif evening_start <= current_time or current_time < night_start:
 else:
     greeting = "[Hello] Доброй ночи! Не сидите долго за сменой!"
 
-print(greeting)
+print(Fore.GREEN + greeting + Style.RESET_ALL)
 
 
 bot.run(TOKEN)
