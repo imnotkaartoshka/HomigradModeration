@@ -47,7 +47,7 @@ def emergency_shutdown():
 
 
 TOKEN = load_token()
-print("[ Launcher ] Токен загружен.. Переходим к следующему этапу запуска.
+print("[ Launcher ] Токен загружен.. Переходим к следующему этапу запуска.")
 
 intents = discord.Intents.default()
 intents.messages = True
